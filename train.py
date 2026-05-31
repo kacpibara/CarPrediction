@@ -64,6 +64,6 @@ for metric, value in results.items():
 
 # Ważność cech
 importance_df = predictor.feature_importance(
-    data=train_df, model=predictor.model_best)
+    data=train_df, model=predictor.get_model_best())
 print("\nFeature importance:")
 print(importance_df[["importance"]])
