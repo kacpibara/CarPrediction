@@ -58,7 +58,7 @@ joblib.dump(scaler, "./agModel/scaler.pkl")
 results = predictor.evaluate(test_df)
 
 # Wyświetlenie wyników
-print("Best model:", predictor.model_best)
+print("Best model:", predictor.get_model_best())
 for metric, value in results.items():
     print(f"{metric}: {value:.4f}")
 
