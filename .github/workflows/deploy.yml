@@ -1,0 +1,43 @@
+name: Deploy Docker app to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout full repo (not shallow)
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      - name: Install Git and Hugging Face CLI
+        run: pip install huggingface_hub
+
+      - name: Deploy to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.SUMLTOKEN }}
+        run: |
+          sudo apt-get install git-lfs
+          git lfs install
+      
+          git clone https://huggingface.co/spaces/kacbar/SUML_proj_15c_2 space-repo
+          rsync -av --exclude=.git --exclude=space-repo ./ space-repo/
+      
+          cd space-repo
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+      
+          git remote set-url origin https://kacbar:${HF_TOKEN}@huggingface.co/spaces/kacbar/SUML_proj_15c_2
+      
+          git lfs track "*.ubj"
+          git add .gitattributes
+      
+          git add .
+          git commit -m "Automatyczny deploy z GitHub Actions"
+          git push origin main
+

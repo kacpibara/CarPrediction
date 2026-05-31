@@ -1,0 +1,4 @@
+pandas
+joblib
+autogluon==0.8.2
+streamlit
